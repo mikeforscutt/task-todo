@@ -24,7 +24,7 @@ Route::get('/', function () {
 Route::get('/tasks', function ()  {
     return view('index', [
         // query builder
-        'tasks' => Task::latest()->get()
+        'tasks' => Task::latest()->paginate(10),
     ]);
 })->name('tasks.index');
 
@@ -54,6 +54,10 @@ Route::put('/tasks/{task}', function (Task $task, TaskRequest $request) {
 })->name('tasks.update');
 
 
+Route::delete('/tasks/{task}', function (Task $task) {
+    $task->delete();
+    return redirect()->route('tasks.index')->with('success','Task Deleted Successfully!');
+})->name('tasks.destroy');
 
 // Route::fallback(function () {
 //     return 'Still got somewhere!';
